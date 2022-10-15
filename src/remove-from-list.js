@@ -22,34 +22,29 @@ const { ListNode } = require("../extensions/list-node.js");
  *   }
  * }
  */
-function removeKFromList(list, k, currentNode = list[0]) {
-    // if (!currentNode) return null;
-    // if (currentNode.next === null) {
-    //     return list;
-    // }
-    // if (currentNode.next.value === k) {
-    //     let nextNode = currentNode.next.next;
-    //     currentNode.next = nextNode;
-    //     removeKFromList(list, k, nextNode);
-    // }
+function removeKFromList(head, k) {
+    let nodeToRemove = findNode(head, k);
+    if (!nodeToRemove) return head;
 
-    let result = [];
-    if (currentNode.value !== k) {
-        result.push(currentNode.value);
-        if (currentNode.next) {
-            let nextNode = currentNode.next;
-            return removeKFromList(list, k, nextNode.value);
-        } else {
-            return result;
-        }
-    } else {
-        if (currentNode.next) {
-            let nextNode = currentNode.next;
-            return removeKFromList(list, k, nextNode.value);
-        } else {
-            return result;
-        }
+    if (nodeToRemove === head) {
+        return removeKFromList(head.next, k);
     }
+    let nodeToRemoveParent = findParentNode(head, nodeToRemove);
+
+    nodeToRemoveParent.next = nodeToRemove.next;
+    return removeKFromList(head, k);
+}
+
+function findNode(node, k) {
+    if (!node) return null;
+    if (node.value === k) return node;
+    return findNode(node.next, k);
+}
+
+function findParentNode(head, node) {
+    if (!head) return null;
+    if (head.next === node) return head;
+    return findParentNode(head.next, node);
 }
 
 module.exports = {
