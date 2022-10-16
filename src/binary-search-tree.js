@@ -78,12 +78,18 @@ class BinarySearchTree {
 
         if (nodeToRemove === this._root && this._hasTwoChildren(nodeToRemove)) {
             let replacement = this.find(this.max(this._root.left));
-            let replacementParent = this._findParentNode(replacement.data);
-            replacementParent.right = replacement.left;
-            replacement.left = this._root.left;
-            replacement.right = this._root.right;
-            this._root = replacement;
-            return;
+            if (nodeToRemove.left === replacement) {
+                this._root = replacement;
+                replacement.right = this._root.right;
+                return;
+            } else {
+                let replacementParent = this._findParentNode(replacement.data);
+                replacementParent.right = replacement.left;
+                replacement.left = this._root.left;
+                replacement.right = this._root.right;
+                this._root = replacement;
+                return;
+            }
         }
 
         if (this._isLeaf(nodeToRemove)) {
@@ -105,11 +111,18 @@ class BinarySearchTree {
         if (this._hasTwoChildren(nodeToRemove)) {
             let direction = this._getDirection(nodeToRemove, nodeParent);
             let replacement = this.find(this.max(nodeToRemove.left));
-            let replacementParent = this._findParentNode(replacement.data);
-            replacementParent.right = replacement.left;
-            replacement.right = nodeToRemove.right;
-            nodeParent[direction] = replacement;
-            return;
+            if (nodeToRemove.left === replacement) {
+                nodeParent[direction] = replacement;
+                replacement.right = nodeToRemove.right;
+                return;
+            } else {
+                let replacementParent = this._findParentNode(replacement.data);
+                replacementParent.right = replacement.left;
+                replacement.right = nodeToRemove.right;
+                replacement.left = nodeToRemove.left;
+                nodeParent[direction] = replacement;
+                return;
+            }
         }
     }
 
